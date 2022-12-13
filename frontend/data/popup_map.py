@@ -10,7 +10,7 @@ import base64
 
 def plot_map():
 
-    plant_ids=(['butterfly',[38.58, -99.09]], ['snake',[32.58, -95.09]], ['elephant', [29.58, -90.09]])
+    plant_ids=(['850230307',[38.58, -99.09]], ['851230763',[32.58, -95.09]], ['851239815.jpg', [29.58, -90.09]])
     map = folium.Map(location=[38.58, -99.09], zoom_start=6, tiles="Stamen Terrain", width=1300, height=700)
 
     # file_ = open("../static/photos/butterfly.jpg", "rb")
@@ -18,9 +18,14 @@ def plot_map():
     # data_url = base64.b64encode(contents).decode("utf-8")
     # file_.close()
 
+
+
+    #file_=open(f"../static/photos/{i[0]}.jpg", "rb")
+
+
     for i in plant_ids:
         coords=i[1]
-        file_=open(f"../static/photos/{i[0]}.jpg", "rb")
+        file_=open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg", "rb")
         contents = file_.read()
         data_url = base64.b64encode(contents).decode("utf-8")
         file_.close()
