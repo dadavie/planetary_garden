@@ -12,7 +12,7 @@ import io
 def plot_map():
 
     plant_ids=(['850230307',[38.58, -99.09]], ['851230763',[32.58, -95.09]], ['851239815', [29.58, -90.09]])
-    map = folium.Map(location=[38.58, -99.09], zoom_start=6, tiles="Stamen Terrain", width=1300, height=700)
+    map = folium.Map(location=[38.58, -99.09], zoom_start=9, tiles="Stamen Terrain", width=1300, height=700)
 
     # file_ = open("../static/photos/butterfly.jpg", "rb")
     # contents = file_.read()
