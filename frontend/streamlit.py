@@ -3,26 +3,6 @@
 ## https://github.com/python-visualization/folium/pull/778
 ## https://discuss.streamlit.io/t/set-map-dimentions-for-folium-static/22789
 
-# class Popup(Element):
-
-#     def __init__(self, html=None, parse_html=False, max_width=300, default_open=False):
-
-#         ### unchanged code removed ###
-
-#         self.default_open = default_open
-
-#         self._template = Template(u"""
-#             var {{this.get_name()}} = L.popup({maxWidth: '{{this.max_width}}'});
-#             {% for name, element in this.html._children.items() %}
-#                 var {{name}} = $('{{element.render(**kwargs).replace('\\n',' ')}}')[0];
-#                 {{this.get_name()}}.setContent({{name}});
-#             {% endfor %}
-#             {{this._parent.get_name()}}.bindPopup({{this.get_name()}})
-#             {% if this.default_open %}.openPopup(){% endif %};
-#             {% for name, element in this.script._children.items() %}
-#                 {{element.render()}}
-#             {% endfor %}
-#         """)  # noqa
 
 import folium
 from folium import IFrame
