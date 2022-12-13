@@ -1,4 +1,6 @@
 import streamlit as st
+from popup_map import plot_map
+
 st.set_page_config(layout="wide")
 
 Header=st.container()
@@ -41,7 +43,7 @@ with Climate_Map:
 
 with Garden:
     st.header('Your garden today')
-
+    plot_map()
     st.subheader('Your garden today is generally populated by these species:')
     st.text("However, the red ones may have to relocate by year ___...")
 
