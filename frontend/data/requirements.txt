@@ -1,3 +1,5 @@
 folium==0.13.0
+Pillow==9.3.0
+requests==2.28.1
 streamlit==1.15.2
 streamlit_folium==0.8.1
