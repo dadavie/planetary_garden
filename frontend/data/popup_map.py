@@ -21,11 +21,11 @@ def plot_map():
 
 
     #file_=open(f"../static/photos/{i[0]}.jpg", "rb")
-
+    #file_=open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg", "rb")
 
     for i in plant_ids:
         coords=i[1]
-        file_=open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg", "rb")
+        image = Image.open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg")
         contents = file_.read()
         data_url = base64.b64encode(contents).decode("utf-8")
         file_.close()
