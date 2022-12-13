@@ -34,7 +34,7 @@ with Climate_Map:
     st.subheader('Select climate future for your garden:')
     map_col, slider_col= st.columns(2)
     map_col.text("MAP")
-    scenario = slider_col.selectbox('Climate Scenario', options=['SSP4563', 'SSP3547', 'SSP483y8g'], index=2)
+    scenario = slider_col.selectbox('Climate Scenario', options=['SSP126', 'SSP245', 'SSP370', 'SSP585'], index=2)
     year = slider_col.select_slider('Year', options=['2040', '2060', '2080', '2100'], value='2100')
     no_clusters = slider_col.select_slider('Number of clusters', options=['20', '30', '60', '100'], value='60')
 
