@@ -3,35 +3,42 @@ from streamlit_folium import st_folium
 import folium
 import os
 import base64
-
-
+from PIL import Image
+import requests
+import io
 
 
 
 def plot_map():
 
-    plant_ids=(['850230307',[38.58, -99.09]], ['851230763',[32.58, -95.09]], ['851239815.jpg', [29.58, -90.09]])
+    plant_ids=(['850230307',[38.58, -99.09]], ['851230763',[32.58, -95.09]], ['851239815', [29.58, -90.09]])
     map = folium.Map(location=[38.58, -99.09], zoom_start=6, tiles="Stamen Terrain", width=1300, height=700)
 
     # file_ = open("../static/photos/butterfly.jpg", "rb")
     # contents = file_.read()
     # data_url = base64.b64encode(contents).decode("utf-8")
     # file_.close()
-
-
-
     #file_=open(f"../static/photos/{i[0]}.jpg", "rb")
-
     #file_=open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg", "rb")
+
 
 
 
     for i in plant_ids:
         coords=i[1]
-        file_= Image.open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg")
+        url = f"https://storage.googleapis.com/planetary/{i[0]}.jpg"
+        response = requests.get(url)
+        img = Image.open(io.BytesIO(response.content))
+        img.save("tmp.jpg")
+        file_= open("tmp.jpg", "rb")
         contents = file_.read()
         data_url = base64.b64encode(contents).decode("utf-8")
         file_.close()
+
+        # file_= Image.open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg")
+        # contents = file_.read()
+        # data_url = base64.b64encode(contents).decode("utf-8")
+        # file_.close()
 
         html = folium.Html(
                 f"""
