@@ -3,3 +3,9 @@ raw_data/
 notebooks/geoapi_key.csv
 **/.DS_Store
 .DS_Store
+**/geoapi_key.csv
+**/secrets.toml
+**/__pycache__
+*.csv
+.env
+.python-version
