@@ -1,5 +1,6 @@
 import streamlit as st
 from popup_map import plot_map
+from address_to_latlon.address_conversion import coordinates_from_address
 
 st.set_page_config(layout="wide")
 
@@ -38,8 +39,17 @@ with Climate_Map:
     year = slider_col.select_slider('Year', options=['2040', '2060', '2080', '2100'], value='2100')
     no_clusters = slider_col.select_slider('Number of clusters', options=['20', '30', '60', '100'], value='60')
 
-    st.subheader('Select a point on the map where you want to grow your garden...or insert your address/ or lat/lon below:')
-    input_coords()
+    selection_method = st.selectbox('The garden growing point selection method:', options=("latitude / longitude","address"))
+
+    if selection_method == "latitude / longitude":
+        st.subheader('Insert your address/ or lat/lon below:')
+        input_coords()
+    else:
+        address_text = st.text_input('Insert your address below', 'Berliner Str. 1, Mainz')
+        input_coordinates = coordinates_from_address(address_text)
+        input_lon = input_coordinates[0]
+        input_lat = input_coordinates[1]
+        st.write('The selected coordinates are:', input_lon, input_lat)
 
 with Garden:
     st.header('Your garden today')
@@ -52,7 +62,6 @@ with Moving_Out:
     st.header("Moving out")
     st.text('These species may have to move out by year ___ :( ')
     st.text ('The climate has changed here (on average 1 degreee, and > 6mm3 precip for e.g) and may not be suitable for these species anymore')
-
 
 
 
