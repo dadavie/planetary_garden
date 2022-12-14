@@ -1,3 +1,4 @@
 raw_data/
-.ipynb_checkpoints
-.DS_Store
+**/.ipynb_checkpoints
+notebooks/geoapi_key.csv
+**/.DS_Store
