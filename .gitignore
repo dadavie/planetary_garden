@@ -9,3 +9,4 @@ notebooks/geoapi_key.csv
 *.csv
 .env
 .python-version
+notebooks/ignore_yolanda
