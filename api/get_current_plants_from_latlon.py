@@ -3,6 +3,7 @@ import numpy as np
 import random
 
 
+
 def get_plants (lat, lon):
         data=pd.read_csv('../raw_data/2021.csv')
         ct_lat = int(round(np.interp(lat, [-90, 90], [360, 0])))
@@ -55,7 +56,7 @@ def get_lists (present_cluster, future_cluster):
         for j in h:
             if j == present_cluster:
                 o=1
-                pres.append(row[['species','Cluster','at_risk']])
+                pres.append(row[['species','Cluster','at_risk', 'thumbnails']])
                 pres[-1]['Cluster']=h
                 for k in h:
                       if k == future_cluster:
@@ -65,7 +66,7 @@ def get_lists (present_cluster, future_cluster):
         if o==0:
             for g in h:
                 if j== future_cluster:
-                    recom.append(row[['species','Cluster']])
+                    recom.append(row[['species','Cluster', 'at_risk', 'thumbnails']])
     if (len(pres)>15):
         pres=random.sample(pres, 15)
     if (len(recom)>15):
