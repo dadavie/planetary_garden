@@ -64,7 +64,7 @@ with Climate_Map:
 
 ################################################################
 # Plotly stuff
-rr = np.load('/root/code/dadavie/planetary_garden/raw_data/frontend_info_future_maps.npy', allow_pickle=True)
+rr = np.load('../../git_data/frontend_info_future_maps.npy', allow_pickle=True)
 ## input from streamlit slider
 #scenario = slider_col.selectbox('Climate Scenario', options=['SSP126', 'SSP245', 'SSP370', 'SSP585'], index=2)
 #year = slider_col.select_slider('Year', options=['2021-40', '2041-60', '2061-80', '2081-2100'], value='2100')
