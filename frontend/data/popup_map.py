@@ -10,7 +10,7 @@ import io
 
 
 def plot_map(df, lat, lon):
-    points=[[lat+0.5, lon+0.5]], [lat+1, lon+1], [lat-1, lon-0.92], [lat-0.87, lon+0.97], [lat+1, lon-1], [lat-0.24, lon-0.5],[lat+0.32, lon-0.6],[lat-0.56, lon+0.78],[lat-0.13, lon-0.1],[lat+0.89, lon-0.34], [lat-0.8, lon+0.6], [lat+0.02, lon-0.3], [lat-0.75, lon-0.74], [lat+0.15, lon+0.56], [lat-0.4, lon+0.56]]
+    points=[[lat+0.5, lon+0.5], [lat+1, lon+1], [lat-1, lon-0.92], [lat-0.87, lon+0.97], [lat+1, lon-1], [lat-0.24, lon-0.5],[lat+0.32, lon-0.6],[lat-0.56, lon+0.78],[lat-0.13, lon-0.1],[lat+0.89, lon-0.34], [lat-0.8, lon+0.6], [lat+0.02, lon-0.3], [lat-0.75, lon-0.74], [lat+0.15, lon+0.56], [lat-0.4, lon+0.56]]
     map = folium.Map(location=[lat, lon], zoom_start=9, tiles="Stamen Terrain", width=1300, height=700)
 
     # file_ = open("../static/photos/butterfly.jpg", "rb")
