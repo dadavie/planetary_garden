@@ -4,7 +4,7 @@ import random
 
 
 def get_plants (lat, lon):
-        data=pd.read_csv('../../raw_data/2021.csv')
+        data=pd.read_csv('../raw_data/2021.csv')
         ct_lat = int(round(np.interp(lat, [-90, 90], [360, 0])))
         ct_lon = int(round(np.interp(lon, [-180, 180], [0, 720])))
         for i, row in data.iterrows():
@@ -15,7 +15,7 @@ def get_plants (lat, lon):
 
 
 def get_future_cluster(lat, lon, ssp, year):
-    future=np.load("../../raw_data/future_scenarios_lonlat_clusters_new.npy")
+    future=np.load("../raw_data/future_scenarios_lonlat_clusters_new.npy")
     if ssp == "ssp126":
         sp=0
     elif ssp == "ssp245":
@@ -46,7 +46,7 @@ def get_future_cluster(lat, lon, ssp, year):
     return ValueError('No future climate data')
 
 def get_lists (present_cluster, future_cluster):
-    species=pd.read_csv("../../raw_data/Species")
+    species=pd.read_csv("../raw_data/Species.csv")
     pres=[]
     recom=[]
     for i, row in species.iterrows():
@@ -71,3 +71,7 @@ def get_lists (present_cluster, future_cluster):
     if (len(recom)>15):
         recom=random.sample(recom, 15)
     return pd.DataFrame(pres), pd.DataFrame(recom)
+
+a,b= get_lists(get_plants(46.904053, 17.822115), get_future_cluster(46.904053, 17.822115, 'ssp585', 2040))
+
+print(a.shape)
