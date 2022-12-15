@@ -21,8 +21,8 @@ def plot_map(df, lat, lon):
     #file_=open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg", "rb")
 
 
-    for i in len(df):
-        url = f"https://storage.googleapis.com/planetary/{df[i]['thumbnails']}.jpg"
+    for i,row in df.iterrows():
+        url = f"https://storage.googleapis.com/planetary/{row['thumbnails']}.jpg"
         response = requests.get(url)
         img = Image.open(io.BytesIO(response.content))
         img.save("tmp.jpg")
@@ -40,7 +40,7 @@ def plot_map(df, lat, lon):
                 f"""
                 <!DOCTYPE html>
                 <html>
-                <p> {df[i]['species']} </p>
+                <p> {row['species']} </p>
 
                 <center>
                     <img src="data:image/jpg;base64,{data_url}" width="70" style="border-radius: 50px;"/>
@@ -49,7 +49,7 @@ def plot_map(df, lat, lon):
         </html>
 
         """, script=True)
-        if df[i]['at_risk']==1:
+        if row['at_risk']==1:
             color='red'
         else:
             color='yellow'
