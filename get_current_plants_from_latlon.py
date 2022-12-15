@@ -1,24 +1,73 @@
 import pandas as pd
 import numpy as np
-def get_current_plants (lat, lon):
-    res=[]
-    c_lat = int(round(np.interp(lat, [-90, 90], [0, 360])))
-    # c_lat_right=c_lat+1
-    c_lon = int(round(np.interp(lon, [-180, 180], [0, 720])))
-    # c_lon_right=c_lon+1
-    occurences=pd.read_csv('raw_data/RedFlag_occurences_alldata_inklClusters.csv')
-    # print (occurences.head())
-    for i, row in occurences.iterrows():
-        llat=row['decimalLatitude']
-        llon=row['decimalLongitude']
-        ct_lat = int(round(np.interp(llat, [-90, 90], [0, 360])))
-        ct_lon = int(round(np.interp(llon, [-180, 180], [0, 720])))
-        # if ct_lat > c_lat & ct_lat< c_lat_right & ct_lon > c_lon & ct_lon < c_lon_right:
-        if ct_lat == c_lat & ct_lon== c_lon:
-            res.append(row)
-
-    return res
+import random
 
 
-h=get_current_plants(47.144379, 14.527587)
-print( h, "length =", len(h))
+def get_plants (lat, lon):
+        data=pd.read_csv('../../raw_data/2021.csv')
+        ct_lat = int(round(np.interp(lat, [-90, 90], [360, 0])))
+        ct_lon = int(round(np.interp(lon, [-180, 180], [0, 720])))
+        for i, row in data.iterrows():
+            if row['1']==ct_lat and row['2']==ct_lon:
+
+                return row['future_cluster']
+        return ValueError('No climate data')
+
+
+def get_future_cluster(lat, lon, ssp, year):
+    future=np.load("../../raw_data/future_scenarios_lonlat_clusters_new.npy")
+    if ssp == "ssp126":
+        sp=0
+    elif ssp == "ssp245":
+        sp=1
+    elif ssp == "ssp370":
+        sp=2
+    elif ssp == "ssp585":
+        sp=3
+    else:
+        sp=np.nan
+
+    if year ==2040:
+        yr=0
+    elif year == 2060:
+        yr=1
+    elif year == 2080:
+        yr=2
+    elif year == 2100:
+        yr=3
+    else:
+        yr=np.nan
+    loc=4*sp+ yr
+    ct_lat = int(round(np.interp(lat, [-90, 90], [360, 0])))
+    ct_lon = int(round(np.interp(lon, [-180, 180], [0, 720])))
+    for i in range(len(future[0])):
+         if future[loc,i,1]==ct_lat and future[loc,i,2]==ct_lon:
+            return future[loc,i,3]
+    return ValueError('No future climate data')
+
+def get_lists (present_cluster, future_cluster):
+    species=pd.read_csv("../../raw_data/Species")
+    pres=[]
+    recom=[]
+    for i, row in species.iterrows():
+        h = list(map(int, row['Cluster'][1:][:-1].split(", ")))
+        o=0
+        for j in h:
+            if j == present_cluster:
+                o=1
+                pres.append(row[['species','Cluster','at_risk']])
+                pres[-1]['Cluster']=h
+                for k in h:
+                      if k == future_cluster:
+                        pres[-1].loc ['at_risk']=0
+                        break
+                pres[-1].loc ['at_risk']=1
+        if o==0:
+            for g in h:
+                if j== future_cluster:
+                    recom.append(row[['species','Cluster']])
+    if (len(pres)>15):
+        pres=random.sample(pres, 15)
+    if (len(recom)>15):
+        recom=random.sample(recom, 15)
+    return pd.DataFrame(pres), pd.DataFrame(recom)
