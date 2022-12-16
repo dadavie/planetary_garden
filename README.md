@@ -1,3 +1,9 @@
+**Planetary garden**
+
+Hayk Asatryan, Yina Cifuentes, Yolanda Laurent and David Schildberger (project leader)
+
+<br>
+
 **Problem Statement**
 
 The global warming and the greenhouse effect have been affecting many nature components:
