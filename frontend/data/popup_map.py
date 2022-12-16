@@ -1,5 +1,6 @@
 import streamlit as st
-from streamlit_folium import st_folium
+# from streamlit_folium import st_folium
+from streamlit_folium import folium_static
 import folium
 import os
 import base64
@@ -8,10 +9,9 @@ import requests
 import io
 
 
-
 def plot_map(df, lat, lon):
-    points=[[lat+0.5, lon+0.5], [lat+1, lon+1], [lat-1, lon-0.92], [lat-0.87, lon+0.97], [lat+1, lon-1], [lat-0.24, lon-0.5],[lat+0.32, lon-0.6],[lat-0.56, lon+0.78],[lat-0.13, lon-0.1],[lat+0.89, lon-0.34], [lat-0.8, lon+0.6], [lat+0.02, lon-0.3], [lat-0.75, lon-0.74], [lat+0.15, lon+0.56], [lat-0.4, lon+0.56]]
-    map = folium.Map(location=[lat, lon], zoom_start=9, tiles="Stamen Terrain", width=1300, height=700)
+    points=[[lat+0.5, lon+0.5], [lat+1, lon+1], [lat-1, lon-0.92], [lat-0.87, lon+0.97], [lat+1, lon-1], [lat-0.24, lon-0.5],[lat+0.32, lon-0.6],[lat-0.56, lon+0.78],[lat-0.13, lon-0.1],[lat+0.89, lon-0.34], [lat-0.8, lon+0.6], [lat+0.02, lon-0.3], [lat-0.75, lon-0.74], [lat+0.15, lon+0.56], [lat-0.4, lon+0.56], [lat+1, lon+1]]
+    map = folium.Map(location=[lat, lon], zoom_start=9, tiles="Stamen Terrain", width=1200, height=900)
 
     # file_ = open("../static/photos/butterfly.jpg", "rb")
     # contents = file_.read()
@@ -55,12 +55,12 @@ def plot_map(df, lat, lon):
             color='yellow'
 
         popup  = folium.Popup(html, max_width=120, max_height= 120, show=True)
-        folium.vector_layers.Marker(location=points[i],popup = popup,icon= folium.Icon(color='beige', icon_color=color,icon = 'pagelines')).add_to(map)
+        folium.vector_layers.Marker(location=points[i],popup = popup,icon= folium.Icon(color=color, icon_color='black',icon = 'globe', sticky=True)).add_to(map)
 
-    st_data = st_folium(map, width = 1525)
+    st_data = folium_static(map, width = 1200, height =900)
 
 
-
+#st_folium
 
             # <center>
             #     <img src="{full_filename}" width="200" style="border-radius: 50px;"/>

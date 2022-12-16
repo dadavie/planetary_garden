@@ -59,13 +59,12 @@ def get_lists (present_cluster, future_cluster):
                 pres.append(row[['species','Cluster','at_risk', 'thumbnails']])
                 pres[-1]['Cluster']=h
                 for k in h:
-                      if k == future_cluster:
+                    if k == future_cluster:
                         pres[-1].loc ['at_risk']=0
                         break
-                pres[-1].loc ['at_risk']=1
         if o==0:
             for g in h:
-                if j== future_cluster:
+                if g== future_cluster:
                     recom.append(row[['species','Cluster', 'at_risk', 'thumbnails']])
     if (len(pres)>15):
         pres=random.sample(pres, 15)
@@ -75,4 +74,4 @@ def get_lists (present_cluster, future_cluster):
 
 a,b= get_lists(get_plants(46.904053, 17.822115), get_future_cluster(46.904053, 17.822115, 'ssp585', 2040))
 
-print(a.shape)
+print(b.shape)
