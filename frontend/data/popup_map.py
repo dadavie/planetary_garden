@@ -19,7 +19,24 @@ def plot_map(df, lat, lon):
     # file_.close()
     #file_=open(f"../static/photos/{i[0]}.jpg", "rb")
     #file_=open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg", "rb")
+    dictt =  {0:'red',
+            1: 'red',
+            2: 'red',
+            3: 'green',
+            4: 'red',
+            5: 'green',
+            6: 'red',
+            7: 'green',
+            8:  'red',
+            9: 'red',
+            10:'green',
+            11:'red',
+            12:'red',
+            13:'red',
+            14:'green',
+            15:'red'
 
+                  }
 
     for i,row in df.iterrows():
         url = f"https://storage.googleapis.com/planetary/{row['thumbnails']}.jpg"
@@ -35,29 +52,46 @@ def plot_map(df, lat, lon):
         # contents = file_.read()
         # data_url = base64.b64encode(contents).decode("utf-8")
         # file_.close()
+        if dictt[i]=='green':
+            html = folium.Html(
+                    f"""
+                    <!DOCTYPE html>
+                    <html>
+                    <h7><b> {row['species']} </b></p>
 
-        html = folium.Html(
-                f"""
-                <!DOCTYPE html>
-                <html>
-                <p> {row['species']} </p>
+                    <center>
+                        <img src="data:image/jpg;base64,{data_url}" width="70" style="border-radius: 50px;"/>
+                    </center>
 
-                <center>
-                    <img src="data:image/jpg;base64,{data_url}" width="70" style="border-radius: 50px;"/>
-                </center>
+            </html>
 
-        </html>
-
-        """, script=True)
-        if row['at_risk']==1:
-            color='red'
+            """, script=True)
         else:
-            color='yellow'
+             html = folium.Html(
+                    f"""
+                    <!DOCTYPE html>
+                    <html>
+                    <h7> <b> {row['species']}</b>; Relocate to: {str(row['Cluster'])[1:-1]} </p>
 
-        popup  = folium.Popup(html, max_width=120, max_height= 120, show=True)
-        folium.vector_layers.Marker(location=points[i],popup = popup,icon= folium.Icon(color=color, icon_color='black',icon = 'globe', sticky=True)).add_to(map)
+                    <center>
+                        <img src="data:image/jpg;base64,{data_url}" width="80" style="border-radius: 50px;"/>
+                    </center>
 
-    st_data = folium_static(map, width = 1200, height =900)
+            </html>
+
+            """, script=True)
+
+        # if row['at_risk']==1:
+        #     color='red'
+        # else:
+        #     color='yellow'
+
+
+
+        popup  = folium.Popup(html, max_width=130, max_height= 130, show=True)
+        folium.vector_layers.Marker(location=points[i],popup = popup,icon= folium.Icon(color=dictt[i], icon_color='black',icon = 'globe', sticky=True)).add_to(map)
+
+    st_data = folium_static(map, width = 1200, height =700)
 
 
 #st_folium

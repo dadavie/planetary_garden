@@ -12,20 +12,22 @@ st.set_page_config(layout="wide")
 Header=st.container()
 Climate_Map =st.container()
 Garden = st.container()
-Moving_Out = st.container()
-Moving_In = st.container()
+Moving_out=st.container()
+Moving_in= st.container()
 
 
-# st.markdown(
-#     """
-#     <style>
-#     .main {
-#     background-color: #6b754b ;
-#     }
-#     </style>
-#     """,
-#     unsafe_allow_html=True
-# )
+
+
+st.markdown(
+    """
+    <style>
+    .main {
+    background-color: #d8ed9d ;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 def input_coords():
     input_lat= st.number_input('insert latitude (-90 to 90)')
@@ -166,41 +168,78 @@ with Climate_Map:
         with Garden:
             st.title('Inspection of your garden today')
             st.header('Your garden today is generally populated by these species:')
-            st.subheader (f" However, the red ones may have to relocate by year {year}...")
+            st.header('The average temperature here is 10°C and precipitation is 838mm/year, Cluster #70')
+
 
             if 'key' not in st.session_state:
                 st.session_state['key'] = data['key1']
             a=pd.DataFrame.from_dict(st.session_state['key'], orient='columns')
             plot_map(a, input_lat, input_lon)
+            # st.header (f" However, the red ones may have to relocate by year {year}...")
 
-
-
-
-        with Moving_Out:
+        # with Moving_out:
+            st.title(f"Our garden environment in {year}")
+            st.header ('The climate has changed here (on average +5°C and -114mm precip/year), conditions similar to present day Cluster #10')
             st.title("Moving out")
-            st.header(f"These species may have to move out by year {year} :( ")
-            st.subheader ('The climate has changed here (on average 1 degreee, and > 6mm3 precip for e.g) and may not be suitable for these species anymore')
+            st.header(f"The RED species may have to move out by year {year}")
+
 
             if 'key' in st.session_state:
                 a=pd.DataFrame.from_dict(st.session_state['key'], orient='columns')
                 url="https://storage.googleapis.com/planetary"
 
 
-                for i, row in a.iterrows():
-                    if row['at_risk']==1:
-                        col_1, col_2 = st.columns([1,1])
-                        cont=st.container()
-                        with cont:
-                            with col_1:
-                                st.subheader(row['species'])
-                            with col_2:
-                                st.image(f"{url}/{row['thumbnails']}.jpg", width=150)
+                # for i, row in a.iterrows():
+                #     if row['at_risk']==1:
+                #         col_1, col_2 = st.columns([1,1])
+                #         cont=st.container()
+                #         with cont:
+                #             with col_1:
+                #                 st.subheader(row['species'])
+                #                 st.text(f"Relocate to cluster(s): {row['Cluster']}")
+                #             with col_2:
+                #                 st.image(f"{url}/{row['thumbnails']}.jpg", width=130)
 
 
+        with Moving_in:
 
-
-
-        with Moving_In:
             st.title("Moving in")
-            st.header('Say hello to your planetary garden newcomers!')
-            data["key2"]
+            st.header(f"Say hello to your planetary garden newcomers! These species may well thrive in the climate of your garden in {year}:")
+            f_data=[('Arenaria tejedensis',[8], 1429249773),('Dendropanax lehmannii',[62], 1432620231 ),('Hakea florulenta',[55,62,72], 1821383457),('Magnolia urraoensis',[32,40], 2837700659),('Pterocarya pterocarpa',[50,55,8,42,69,37,57,26,14,45,22,23], 930740102), ('Syringa josikaea',[50, 55, 14, 69, 22, 42, 23, 37, 31, 8, 7],930741619)]
+
+            for i in f_data:
+                col_1, col_2 = st.columns([1,1])
+                cont2=st.container()
+                with cont2:
+                    with col_1:
+                            st.subheader(i[0])
+                    with col_2:
+                        st.image(f"{url}/{i[2]}.jpg", width=130)
+                # data["key2"]
+    #  with Future:
+    #         go=st.container()
+    #         with go:
+    #             st.title(f"Our garden in {year}")
+    #             c1,c2=st.columns([1,1])
+
+    #             c1.title("Moving out")
+    #             c1.header(f"These species may have to move out by year {year}")
+    #             c1.subheader('The climate has changed here (on average > 4 degrees celsius) and may not be suitable for these species anymore')
+    #             c2.title("Moving in")
+    #             c2.header('Say hello to your planetary garden newcomers!')
+
+    #         next=st.container()
+    #         with next:
+    #             left_col_1, left_col_2, right_col_1, right_col_2=next.columns([1,1,1,1])
+
+
+    #             if 'key' in st.session_state:
+    #                 a=pd.DataFrame.from_dict(st.session_state['key'], orient='columns')
+    #                 url="https://storage.googleapis.com/planetary"
+    #                 for i, row in a.iterrows():
+    #                     if row['at_risk']==1:
+    #                         # left_col_1, left_col_2 = st.columns([1,1])
+    #                         cont=st.container()
+    #                         with cont:
+    #                             left_col_1.subheader(row['species'])
+    #                             left_col_2.image(f"{url}/{row['thumbnails']}.jpg", width=150)

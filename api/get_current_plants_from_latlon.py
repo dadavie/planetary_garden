@@ -61,16 +61,42 @@ def get_lists (present_cluster, future_cluster):
                 for k in h:
                     if k == future_cluster:
                         pres[-1].loc ['at_risk']=0
-                        break
+
         if o==0:
             for g in h:
                 if g== future_cluster:
                     recom.append(row[['species','Cluster', 'at_risk', 'thumbnails']])
-    if (len(pres)>15):
-        pres=random.sample(pres, 15)
-    if (len(recom)>15):
-        recom=random.sample(recom, 15)
+    if (len(pres)>6):
+        pres=random.sample(pres, 6)
+    if (len(recom)>7):
+        recom=random.sample(recom, 7)
     return pd.DataFrame(pres), pd.DataFrame(recom)
+
+# def get_lists (present_cluster, future_cluster):
+#     species=pd.read_csv("../raw_data/Species.csv")
+#     pres=[]
+#     recom=[]
+#     for i, row in species.iterrows():
+#         h = list(map(int, row['Cluster'][1:][:-1].split(", ")))
+#         o=0
+#         for j in h:
+#             if j == present_cluster:
+#                 o=1
+#                 pres.append(row[['species','Cluster','at_risk', 'thumbnails']])
+#                 pres[-1]['Cluster']=h
+#                 for k in h:
+#                     if k == future_cluster:
+#                         pres[-1].loc ['at_risk']=0
+
+#         if o==0:
+#             for g in h:
+#                 if g== future_cluster:
+#                     recom.append(row[['species','Cluster', 'at_risk', 'thumbnails']])
+#     if (len(pres)>15):
+#         pres=random.sample(pres, 15)
+#     if (len(recom)>15):
+#         recom=random.sample(recom, 15)
+#     return pd.DataFrame(pres), pd.DataFrame(recom)
 
 a,b= get_lists(get_plants(46.904053, 17.822115), get_future_cluster(46.904053, 17.822115, 'ssp585', 2040))
 
