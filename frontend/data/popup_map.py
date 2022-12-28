@@ -10,7 +10,7 @@ import io
 
 
 def plot_map(df, lat, lon):
-    points=[[lat+0.5, lon+0.5], [lat+1, lon+1], [lat-1, lon-0.92], [lat-0.87, lon+0.97], [lat+1, lon-1], [lat-0.24, lon-0.5],[lat+0.32, lon-0.6],[lat-0.56, lon+0.78],[lat-0.13, lon-0.1],[lat+0.89, lon-0.34], [lat-0.8, lon+0.6], [lat+0.02, lon-0.3], [lat-0.75, lon-0.74], [lat+0.15, lon+0.56], [lat-0.4, lon+0.56], [lat+1, lon+1]]
+    points=[[lat+0.5, lon+0.5], [lat+1, lon+1], [lat-1, lon-1.92], [lat-0.87, lon+0.97], [lat+1, lon-1], [lat-2.24, lon-0.5],[lat+0.32, lon-0.6],[lat-0.56, lon+0.78],[lat-0.13, lon-0.1],[lat+1.89, lon-0.34], [lat-0.8, lon+0.6], [lat+2.72, lon-0.3], [lat-0.75, lon-0.74], [lat+0.15, lon+0.56], [lat-0.4, lon+0.56], [lat+1, lon+1]]
     map = folium.Map(location=[lat, lon], zoom_start=9, tiles="Stamen Terrain", width=1200, height=900)
 
     # file_ = open("../static/photos/butterfly.jpg", "rb")
@@ -19,24 +19,25 @@ def plot_map(df, lat, lon):
     # file_.close()
     #file_=open(f"../static/photos/{i[0]}.jpg", "rb")
     #file_=open(f"https://storage.googleapis.com/planetary/{i[0]}.jpg", "rb")
-    dictt =  {0:'red',
-            1: 'red',
-            2: 'red',
-            3: 'green',
-            4: 'red',
-            5: 'green',
-            6: 'red',
-            7: 'green',
-            8:  'red',
-            9: 'red',
-            10:'green',
-            11:'red',
-            12:'red',
-            13:'red',
-            14:'green',
-            15:'red'
 
-                  }
+    # dictt =  {0:'red',
+    #         1: 'red',
+    #         2: 'red',
+    #         3: 'green',
+    #         4: 'red',
+    #         5: 'green',
+    #         6: 'red',
+    #         7: 'green',
+    #         8:  'red',
+    #         9: 'red',
+    #         10:'green',
+    #         11:'red',
+    #         12:'red',
+    #         13:'red',
+    #         14:'green',
+    #         15:'red'
+
+    #               }
 
     for i,row in df.iterrows():
         url = f"https://storage.googleapis.com/planetary/{row['thumbnails']}.jpg"
@@ -52,7 +53,8 @@ def plot_map(df, lat, lon):
         # contents = file_.read()
         # data_url = base64.b64encode(contents).decode("utf-8")
         # file_.close()
-        if dictt[i]=='green':
+        if row['at_risk']==0:
+            color='green'
             html = folium.Html(
                     f"""
                     <!DOCTYPE html>
@@ -67,7 +69,8 @@ def plot_map(df, lat, lon):
 
             """, script=True)
         else:
-             html = folium.Html(
+            color='red'
+            html = folium.Html(
                     f"""
                     <!DOCTYPE html>
                     <html>
@@ -81,15 +84,13 @@ def plot_map(df, lat, lon):
 
             """, script=True)
 
-        # if row['at_risk']==1:
-        #     color='red'
-        # else:
-        #     color='yellow'
+
+
 
 
 
         popup  = folium.Popup(html, max_width=130, max_height= 130, show=True)
-        folium.vector_layers.Marker(location=points[i],popup = popup,icon= folium.Icon(color=dictt[i], icon_color='black',icon = 'globe', sticky=True)).add_to(map)
+        folium.vector_layers.Marker(location=points[i],popup = popup,icon= folium.Icon(color=color, icon_color='black',icon = 'globe', sticky=True)).add_to(map)
 
     st_data = folium_static(map, width = 1200, height =700)
 

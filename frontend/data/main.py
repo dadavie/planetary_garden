@@ -5,9 +5,10 @@ import plotly.express as px
 import numpy as np
 import pandas as pd
 import requests
+from streamlit_plotly_events import plotly_events
 
 
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide", page_icon="🧊")
 
 Header=st.container()
 Climate_Map =st.container()
@@ -18,21 +19,17 @@ Moving_in= st.container()
 
 
 
-st.markdown(
-    """
-    <style>
-    .main {
-    background-color: #d8ed9d ;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+# st.markdown(
+#     """
+#     <style>
+#     .main {
+#     background-color: #d8ed9d ;
+#     }
+#     </style>
+#     """,
+#     unsafe_allow_html=True
+# )
 
-def input_coords():
-    input_lat= st.number_input('insert latitude (-90 to 90)')
-    input_lon= st.number_input('insert longitude (-180 to 180)')
-    return input_lat, input_lon
 
 
 def fetch( url):
@@ -101,11 +98,15 @@ with Climate_Map:
                 '2081-2100': 4,
                 }
 
+
+
+
     ## select data
     year_range = str(int(year)-19)+"-"+str(year)
     sel = dict_scen[scenario.lower()]*dict_time[year_range]-1
 
     ## make DF from array - select scenario
+    dd = pd.DataFrame(rr[sel])
     dd = pd.DataFrame(rr[sel])
     dd = dd.iloc[:,[1,2,3,4,5]]
     dd.columns = ['lat','lon', 'mean temp/y ', 'ppt/y ', 'cluster']
@@ -115,16 +116,24 @@ with Climate_Map:
     dd['ppt/y '] =  ' ' + dd['ppt/y '].astype(str) + ' mm'
     dd['mean temp/y '] = ' ' + dd['mean temp/y '].astype(str) + ' °C'
 
+
+    ## add info to columns
+    dd['cluster_name'] = 'Cluster ' + dd['cluster'].astype(str)
+    dd['ppt/y '] =  ' ' + dd['ppt/y '].astype(str) + ' mm'
+    dd['mean temp/y '] = ' ' + dd['mean temp/y '].astype(str) + ' °C'
+
+    color_means={ '16':1,'49':2,'63':3,'47':4,'73':5,'5':6,'65':7,'36':8,'20':9,'42':10,'30':11,'46':12,'11':13,'54':14,'27':15,'1':16,'52':17,'44':18,'17':19,'0':20,'10':21,'9':22,'59':23,'25':24,'70':25,'18':26,'33':27,'58':28,'21':29,'3':30,'13':31,'12':32,'28':33,'39':34,'43':35,'4':36,'64':37}
+    dd['cluster_ordered_by_temp']=dd['cluster'].map(lambda x: color_means[str(x)])
     ## plot - first trial
-    fig = px.scatter(dd, x='lon', y='lat', range_x=[-5,725], range_y=[320,0],
-                    color='cluster', color_continuous_scale=px.colors.sequential.Viridis,
+    fig = fig = px.scatter(dd[:60137*4], x='lon', y='lat', range_x=[-5,725], range_y=[320,0],
+                    color='cluster_ordered_by_temp', color_continuous_scale=px.colors.sequential.Turbo,
                     hover_name='cluster_name',
                     hover_data={'cluster':False,
                             'lon':False,
                             'lat':False,
                             'mean temp/y ':True,
                             'ppt/y ':True}) ## make map bigger than max range
-    fig.update_layout(height=700, width=1000)
+    fig.update_layout(height=600, width=1200)
     fig.update_yaxes(title='y', visible=False, showticklabels=False)
     fig.update_xaxes(title='x', visible=False, showticklabels=False)
     fig.update(layout_coloraxis_showscale=False) ## no legend
@@ -134,12 +143,17 @@ with Climate_Map:
     }) ## background color - maybe adjust to streamlit page-s background
 
     fig.update_traces(
-        marker=dict(size=1.8, opacity=0.7),
+        marker=dict(size=2.5, opacity=0.7),
         hoverlabel = dict(bgcolor = 'red')
     )
 
-    # Plot!
-    st.plotly_chart(fig, use_container_width=True)
+    # Plot! use_container_width=True
+    # st.plotly_chart(fig )
+    selected_points = plotly_events(fig,click_event=True, hover_event=False)
+    if selected_points:
+        st.write(selected_points)
+        input_lat=selected_points[0]['x']
+        input_lon=selected_points[0]['y']
 
     # ################################################################
 
@@ -148,7 +162,9 @@ with Climate_Map:
 
     if selection_method == "latitude / longitude":
         st.subheader('Insert lat/lon below:')
-        input_coords()
+        input_lat= st.number_input('insert latitude (-90 to 90)')
+        input_lon= st.number_input('insert longitude (-180 to 180)')
+
     else:
         st.subheader('Insert address below:')
         address_text = st.text_input('Insert your address below:', 'Berliner Str. 1, Mainz')
@@ -157,7 +173,8 @@ with Climate_Map:
         input_lat = input_coordinates[1]
         st.write('The selected coordinates are:', input_lon, input_lat)
 
-    if st.button('Submit'):
+    if st.button('Submit') or selected_points:
+
 
         data = fetch(f"http://localhost:8000/predict?lat={input_lat}&lon={input_lon}2&ssp={scenario}&year={year}")
         if data:
@@ -201,21 +218,27 @@ with Climate_Map:
                 #                 st.image(f"{url}/{row['thumbnails']}.jpg", width=130)
 
 
-        with Moving_in:
+            with Moving_in:
 
-            st.title("Moving in")
-            st.header(f"Say hello to your planetary garden newcomers! These species may well thrive in the climate of your garden in {year}:")
-            f_data=[('Arenaria tejedensis',[8], 1429249773),('Dendropanax lehmannii',[62], 1432620231 ),('Hakea florulenta',[55,62,72], 1821383457),('Magnolia urraoensis',[32,40], 2837700659),('Pterocarya pterocarpa',[50,55,8,42,69,37,57,26,14,45,22,23], 930740102), ('Syringa josikaea',[50, 55, 14, 69, 22, 42, 23, 37, 31, 8, 7],930741619)]
+                st.title("Moving in")
+                st.header(f"Say hello to your planetary garden newcomers! These species may well thrive in the climate of your garden in {year}:")
+                # f_data=[('Arenaria tejedensis',[8], 1429249773),('Dendropanax lehmannii',[62], 1432620231 ),('Hakea florulenta',[55,62,72], 1821383457),('Magnolia urraoensis',[32,40], 2837700659),('Pterocarya pterocarpa',[50,55,8,42,69,37,57,26,14,45,22,23], 930740102), ('Syringa josikaea',[50, 55, 14, 69, 22, 42, 23, 37, 31, 8, 7],930741619)]
 
-            for i in f_data:
-                col_1, col_2 = st.columns([1,1])
-                cont2=st.container()
-                with cont2:
-                    with col_1:
-                            st.subheader(i[0])
-                    with col_2:
-                        st.image(f"{url}/{i[2]}.jpg", width=130)
-                # data["key2"]
+                # for i in f_data:
+                #     col_1, col_2 = st.columns([1,1])
+                #     cont2=st.container()
+                #     with cont2:
+                #         with col_1:
+                #                 st.subheader(i[0])
+                #         with col_2:
+                #             st.image(f"{url}/{i[2]}.jpg", width=130)
+
+                st.write(data['key2'])
+                st.write(data['key3'])
+                st.write(data['present_cluster'])
+                st.write(data['future_cluster'])
+
+
     #  with Future:
     #         go=st.container()
     #         with go:
@@ -243,3 +266,49 @@ with Climate_Map:
     #                         with cont:
     #                             left_col_1.subheader(row['species'])
     #                             left_col_2.image(f"{url}/{row['thumbnails']}.jpg", width=150)
+
+
+
+
+
+
+
+# ## make DF from array - select scenario
+#     dd = pd.DataFrame(rr[sel])
+#     dd = dd.iloc[:,[1,2,3,4,5]]
+#     dd.columns = ['lat','lon', 'mean temp/y ', 'ppt/y ', 'cluster']
+
+#     ## add info to columns
+#     dd['cluster_name'] = 'Cluster ' + dd['cluster'].astype(str)
+#     dd['ppt/y '] =  ' ' + dd['ppt/y '].astype(str) + ' mm'
+#     dd['mean temp/y '] = ' ' + dd['mean temp/y '].astype(str) + ' °C'
+
+#     color_means={ '16':1,'49':2,'63':3,'47':4,'73':5,'5':6,'65':7,'36':8,'20':9,'42':10,'30':11,'46':12,'11':13,'54':14,'27':15,'1':16,'52':17,'44':18,'17':19,'0':20,'10':21,'9':22,'59':23,'25':24,'70':25,'18':26,'33':27,'58':28,'21':29,'3':30,'13':31,'12':32,'28':33,'39':34,'43':35,'4':36,'64':37}
+#     dd['cluster_ordered_by_temp']=dd['cluster'].map(lambda x: color_means[str(x)])
+#     ## plot - first trial
+#     fig = fig = px.scatter(dd, x='lon', y='lat', range_x=[-5,725], range_y=[320,0],
+#                     color='cluster_ordered_by_temp', color_continuous_scale=px.colors.sequential.Turbo,
+#                     hover_name='cluster_name',
+#                     hover_data={'cluster':False,
+#                             'lon':False,
+#                             'lat':False,
+#                             'mean temp/y ':True,
+#                             'ppt/y ':True}) ## make map bigger than max range
+#     fig.update_layout(height=600, width=1200)
+#     fig.update_yaxes(title='y', visible=False, showticklabels=False)
+#     fig.update_xaxes(title='x', visible=False, showticklabels=False)
+#     fig.update(layout_coloraxis_showscale=False) ## no legend
+#     fig.update_layout({
+#         'plot_bgcolor': 'rgba(0,0,0,0)',
+#         'paper_bgcolor': 'rgba(0,0,0,0)'
+#     }) ## background color - maybe adjust to streamlit page-s background
+
+#     fig.update_traces(
+#         marker=dict(size=2.5, opacity=0.7),
+#         hoverlabel = dict(bgcolor = 'red')
+#     )
+
+#     # Plot! use_container_width=True
+#     st.plotly_chart(fig )
+#     # selected_points = plotly_events(fig,click_event=True, hover_event=False)
+#     # st.write(selected_points)
