@@ -10,7 +10,7 @@ import io
 import pandas as pd
 from folium.plugins import FastMarkerCluster, MarkerCluster
 import leafmap.foliumap
-
+from google.cloud import storage
 
 
 def plot_map(df):
@@ -263,9 +263,20 @@ def plot_map_2():
     # call to render Folium map in Streamlit
 
 
+    storage_client = storage.Client()
+    bucket = storage_client.bucket('planetary_garden_static_map')
+    blob = bucket.blob('map4.html')
 
-    with open('map4.html', 'r') as f:
-         map=f.read()
+
+    with blob.open("r") as f:
+        map = f.read()
+
+
+
+
+    # link='https://storage.googleapis.com/planetary_garden_static_map/map4.html'
+    # with open('https://storage.googleapis.com/planetary_garden_static_map/map4.html', 'r') as f:
+    #      map=f.read()
     # components.iframe('https://storage.cloud.google.com/planetary_garden_static_map/map2.html', height=900)
     # return components.html(map, height=600,)
     # components.iframe("https://storage.cloud.google.com/planetary_garden_static_map/map2.html", height=900)
