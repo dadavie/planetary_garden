@@ -264,7 +264,7 @@ def plot_map_2():
 
 
 
-    with open('../../notebooks/ignore_yolanda/map4.html', 'r') as f:
+    with open('map4.html', 'r') as f:
          map=f.read()
     # components.iframe('https://storage.cloud.google.com/planetary_garden_static_map/map2.html', height=900)
     # return components.html(map, height=600,)
