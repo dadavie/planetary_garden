@@ -151,7 +151,7 @@ def plot_map(df):
 def plot_map_2():
     # points=[[lat+0.5, lon+0.5], [lat+1, lon+1], [lat-1, lon-1.92], [lat-0.87, lon+0.97], [lat+1, lon-1], [lat-2.24, lon-0.5],[lat+0.32, lon-0.6],[lat-0.56, lon+0.78],[lat-0.13, lon-0.1],[lat+1.89, lon-0.34], [lat-0.8, lon+0.6], [lat+2.72, lon-0.3], [lat-0.75, lon-0.74], [lat+0.15, lon+0.56], [lat-0.4, lon+0.56], [lat+1, lon+1]]
     # map = folium.Map(location=[15, 73], zoom_start=3, tiles="Stamen Terrain", width=1200, height=900)
-    df= pd.read_csv("../../raw_data/occurrences.csv")
+    # df= pd.read_csv("../../raw_data/occurrences.csv")
 
     # for i,row in df[:50].iterrows():
     #     # url = f"https://storage.googleapis.com/planetary/{row['thumbnails_x']}.jpg"

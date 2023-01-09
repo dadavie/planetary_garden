@@ -142,7 +142,7 @@ if page == "Climate Map":
         @st.cache
         def plot_m ():
             fig = px.scatter(dd[:60137*4], x='lon', y='lat', range_x=[-5,725], range_y=[ 320, 0],
-                            color='cluster_ordered_by_temp', color_continuous_scale=px.colors.sequential.Turbo,
+                            color='Cluster', color_continuous_scale=px.colors.sequential.Turbo,
                             hover_name='cluster_name',
                             hover_data={'cluster':False,
                                     'lon':False,
