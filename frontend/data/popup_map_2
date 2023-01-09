@@ -1,0 +1,47 @@
+import streamlit as st
+# from streamlit_folium import st_folium
+from streamlit_folium import folium_static
+import folium
+import os
+import base64
+from PIL import Image
+import requests
+import io
+import pandas as pd
+
+def plot_map():
+    # points=[[lat+0.5, lon+0.5], [lat+1, lon+1], [lat-1, lon-1.92], [lat-0.87, lon+0.97], [lat+1, lon-1], [lat-2.24, lon-0.5],[lat+0.32, lon-0.6],[lat-0.56, lon+0.78],[lat-0.13, lon-0.1],[lat+1.89, lon-0.34], [lat-0.8, lon+0.6], [lat+2.72, lon-0.3], [lat-0.75, lon-0.74], [lat+0.15, lon+0.56], [lat-0.4, lon+0.56], [lat+1, lon+1]]
+    map = folium.Map(location=[lat, lon], zoom_start=0, tiles="Stamen Terrain", width=1200, height=900)
+    df= pd.read_csv("../../raw_data/occurrences")
+
+    for i,row in df.iterrows():
+        url = f"https://storage.googleapis.com/planetary/{row['thumbnails']}.jpg"
+        response = requests.get(url)
+        img = Image.open(io.BytesIO(response.content))
+        img.save("tmp.jpg")
+        file_= open("tmp.jpg", "rb")
+        contents = file_.read()
+        data_url = base64.b64encode(contents).decode("utf-8")
+        file_.close()
+
+
+
+        color='green'
+        html = folium.Html(
+                f"""
+                <!DOCTYPE html>
+                <html>
+                <h7> <b> {row['species']}</b>; Relocate to: {str(row['Cluster'])[1:-1]} </p>
+
+                <center>
+                    <img src="data:image/jpg;base64,{data_url}" width="80" style="border-radius: 50px;"/>
+                </center>
+
+        </html>
+
+        """, script=True)
+
+        popup  = folium.Popup(html, max_width=130, max_height= 130, show=True)
+        folium.vector_layers.Marker(location=[row['decimalLatitude'], row['decimalLongitude']],popup = popup,icon= folium.Icon(color=color, icon_color='black',icon = 'globe', sticky=True)).add_to(map)
+
+    st_data = folium_static(map, width = 1200, height =700)
