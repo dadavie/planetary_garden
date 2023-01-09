@@ -226,7 +226,7 @@ elif page == "Plant Occurrences":
 
                 with Garden:
                     st.title('Say hello to our newcomers!')
-                    st.write("We reccommend you grow these new fellas in your garden: ")
+                    st.write("We reccommend you grow these new fellas in your garden, as they most likely will find the climate and soil conditions favourable")
                     # if 'key' not in st.session_state:
                     #     st.session_state['key'] = data['key1']
                     # a=pd.DataFrame.from_dict(st.session_state['key'], orient='columns')
