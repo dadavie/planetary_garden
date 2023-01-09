@@ -170,11 +170,11 @@ if page == "Climate Map":
         selected_points = plotly_events(fig,click_event=True, hover_event=False)
 
         if selected_points:
-            st.write(selected_points)
+            # st.write(selected_points)
             m_input_lat = (np.interp(selected_points[0]['y'], [ 0, 360], [90, -90]))
             m_input_lon = (np.interp(selected_points[0]['x'], [0, 720], [-180, 180]))
             # data = fetch(f"http://localhost:8000/predict?lat={m_input_lat}&lon={m_input_lon}2&ssp={scenario}&year={year}")
-            data=fetch(f"https://hello-00002-yuy-t7c5adl74a-ew.a.run.app/predict?lat={m_input_lat}&lon={m_input_lon}&ssp=ssp126&year={year}")
+            data=fetch(f"https://hello-00002-yuy-t7c5adl74a-ew.a.run.app/predict?lat={m_input_lat}&lon={m_input_lon}&ssp={scenario}&year={year}")
             if  not data:
                 st.error("Error")
             else:
