@@ -139,7 +139,7 @@ if page == "Climate Map":
         dd['Cluster']=dd['cluster'].map(lambda x: color_means[str(x)])
         ## plot - first trial
 
-
+        @st.cache
         def plot_m ():
             fig = px.scatter(dd[:60137*4], x='lon', y='lat', range_x=[-5,725], range_y=[ 320, 0],
                             color='Cluster', color_continuous_scale=px.colors.sequential.Turbo,
