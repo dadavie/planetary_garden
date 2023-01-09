@@ -4,6 +4,10 @@ Hayk Asatryan, Yina Cifuentes, Yolanda Laurent and David Schildberger (project l
 
 <br>
 
+[Link to planetary garden](https://dadavie-planetary-garden-frontenddatamain-4jt2zp.streamlit.app/)
+
+<br>
+
 **Problem Statement**
 
 The global warming and the greenhouse effect have been affecting many nature components:
